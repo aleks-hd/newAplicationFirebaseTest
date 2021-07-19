@@ -6,6 +6,15 @@ import android.os.Parcelable;
 public class Note implements Parcelable {
 
     private String namee, description;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNamee() {
         return namee;
@@ -23,12 +32,8 @@ public class Note implements Parcelable {
         this.description = description;
     }
 
-
-
-
-
-
-
+    public Note() {
+    }
 
     protected Note(Parcel in) {
     }

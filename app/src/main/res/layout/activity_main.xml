@@ -7,25 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Введите текст"
-        />
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Введите описание"
-        />
-    <Button
-        android:id="@+id/saveNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Сохранить"
-        android:textStyle="italic"/>
+
+
+
     <fragment
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"

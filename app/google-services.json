@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1086903702779",
+    "project_id": "testnewnote-a9050",
+    "storage_bucket": "testnewnote-a9050.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086903702779:android:98c39a4804d18469860c5e",
+        "android_client_info": {
+          "package_name": "com.hfad.newaplicationfirebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086903702779-ul05n10tbrtqge2fot6ci0cmlhg92t5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzvUmQLW47RwSl8I-XwlgBud9by3w1njQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086903702779-ul05n10tbrtqge2fot6ci0cmlhg92t5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

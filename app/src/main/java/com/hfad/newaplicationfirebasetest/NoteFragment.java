@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,12 +26,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hfad.newaplicationfirebasetest.adapter.NoteAdapter;
 import com.hfad.newaplicationfirebasetest.data.Note;
+import com.hfad.newaplicationfirebasetest.data.NoteDataMapping;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 
 public class NoteFragment extends Fragment {
@@ -45,8 +43,9 @@ public class NoteFragment extends Fragment {
     String NOTE_COLLECTION = "notes";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference = db.collection(NOTE_COLLECTION);
-    Map<String, String> notesfordb;
-
+    Map<String, Note> notesfordb;
+    ArrayList<Note> notewithDB;
+    Note note;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,17 +110,18 @@ public class NoteFragment extends Fragment {
         nameInput = (String) name.getText().toString();
         descriptionInput = (String) description.getText().toString();
         Note note = new Note();
-        notesfordb=new HashMap<>();
-        notesfordb.put(nameInput, descriptionInput);
-        note.setNamee(nameInput);
+        notesfordb = new HashMap<>();
+        notesfordb.put("object_1", note);
+        note.setName(nameInput);
         note.setDescription(descriptionInput);
         arrayList.add(note);
         adapter.notifyDataSetChanged();
         initDB();
         readdb();
+
     }
 
-    void initDB(){
+    void initDB() {
         collectionReference
                 .add(notesfordb)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -139,17 +139,29 @@ public class NoteFragment extends Fragment {
 
     }
 
-    void readdb(){
+    void readdb() {
+
         collectionReference
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
+
+                        if (task.isSuccessful()) {
+                            notewithDB = new ArrayList<Note>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> documentMap = document.getData();
+                                note = new Note();
+                              //  note = (Note) documentMap.values();
+                                notewithDB.add(note);
+
+                              //  Log.d("oUTPUT", note.getName()+"");
                                 Log.d("ответ от БД", document.getId() + " => " + document.getData());
                             }
-                        } else { Log.w("ошибка", "Error getting documents.", task.getException());}
+                        } else {
+                            Log.w("ошибка", "Error getting documents.", task.getException());
+                        }
                     }
                 });
     }

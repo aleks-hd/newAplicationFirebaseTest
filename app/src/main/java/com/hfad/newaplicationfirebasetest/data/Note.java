@@ -5,23 +5,23 @@ import android.os.Parcelable;
 
 public class Note implements Parcelable {
 
-    private String namee, description;
-    private int id;
+    private String name, description;
+    private String id;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getNamee() {
-        return namee;
+    public String getName() {
+        return name;
     }
 
-    public void setNamee(String namee) {
-        this.namee = namee;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

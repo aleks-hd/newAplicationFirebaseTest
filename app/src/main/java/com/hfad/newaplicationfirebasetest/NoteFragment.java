@@ -15,10 +15,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hfad.newaplicationfirebasetest.adapter.NoteAdapter;
 import com.hfad.newaplicationfirebasetest.data.Note;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 
 public class NoteFragment extends Fragment {
@@ -28,6 +42,10 @@ public class NoteFragment extends Fragment {
     ArrayList<Note> arrayList;
     RecyclerView recyclerView;
     NoteAdapter adapter;
+    String NOTE_COLLECTION = "notes";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference collectionReference = db.collection(NOTE_COLLECTION);
+    Map<String, String> notesfordb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,8 +61,6 @@ public class NoteFragment extends Fragment {
         initEnterInfo(view);
         initInputData(view);
         initRecyclerView(recyclerView);
-
-
         return view;
     }
 
@@ -62,14 +78,7 @@ public class NoteFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new NoteAdapter(arrayList);
         recyclerView.setAdapter(adapter);
-        adapter.SetOnClickListener(new NoteAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //initclickadd();
-                adapter.notifyItemChanged(position);
-                Log.d("click","ftftftf");
-            }
-        });
+
     }
 
 
@@ -87,25 +96,62 @@ public class NoteFragment extends Fragment {
         arrayList = new ArrayList<>();
         saveBtn.setOnClickListener(new View.OnClickListener() {
 
+
             @Override
             public void onClick(View view) {
                 initclickadd();
-                Log.d("add Note", "Якобы сохранили" );
+                Log.d("add Note", "Якобы сохранили");
             }
         });
 
     }
-    void initclickadd(){
+
+    void initclickadd() {
 
         nameInput = (String) name.getText().toString();
         descriptionInput = (String) description.getText().toString();
         Note note = new Note();
+        notesfordb=new HashMap<>();
+        notesfordb.put(nameInput, descriptionInput);
         note.setNamee(nameInput);
         note.setDescription(descriptionInput);
         arrayList.add(note);
         adapter.notifyDataSetChanged();
+        initDB();
+        readdb();
+    }
+
+    void initDB(){
+        collectionReference
+                .add(notesfordb)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("Снапшот добавленв с ID", documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ошибка при добавлении", "Error adding document", e);
+                    }
+                });
 
     }
 
+    void readdb(){
+        collectionReference
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                Log.d("ответ от БД", document.getId() + " => " + document.getData());
+                            }
+                        } else { Log.w("ошибка", "Error getting documents.", task.getException());}
+                    }
+                });
+    }
 
 }

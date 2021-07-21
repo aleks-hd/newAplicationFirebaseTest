@@ -46,6 +46,7 @@ public class NoteFragment extends Fragment {
     Map<String, Note> notesfordb;
     ArrayList<Note> notewithDB;
     Note note;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,11 +153,12 @@ public class NoteFragment extends Fragment {
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> documentMap = document.getData();
-                                note = new Note();
-                              //  note = (Note) documentMap.values();
+                                note = NoteDataMapping.toNote(document.getId(), documentMap);
                                 notewithDB.add(note);
+                                String name = note.getName();
 
-                              //  Log.d("oUTPUT", note.getName()+"");
+                                Log.d("OUTPUT", name+ "");
+
                                 Log.d("ответ от БД", document.getId() + " => " + document.getData());
                             }
                         } else {

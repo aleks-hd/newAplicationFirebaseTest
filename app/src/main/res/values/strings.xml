@@ -2,4 +2,11 @@
     <string name="app_name">newAplicationFirebaseTest</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nameTV">Имя</string>
+    <string name="descriptionTV">Описание</string>
+    <string name="higtEditName">Введите текст</string>
+    <string name="higtEditDescription">Введите описание</string>
+    <string name="btnDelete">Удалить</string>
+    <string name="btnSave">Сохранить</string>
+    <string name="btnAdd">Добавить</string>
 </resources>

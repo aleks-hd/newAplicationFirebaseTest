@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="siteTVDescription">20sp</dimen>
+    <dimen name="sizeNameTV">30sp</dimen>
+    <dimen name="widthZero">0dp</dimen>
+    <dimen name="sizeSpace">20dp</dimen>
+</resources>

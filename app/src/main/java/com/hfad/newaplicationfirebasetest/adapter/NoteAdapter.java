@@ -3,6 +3,7 @@ package com.hfad.newaplicationfirebasetest.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,21 +49,27 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name,description;
-
+        TextView nameTV,descriptionTV;
+        Button btnDelete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            name = itemView.findViewById(R.id.nameNote);
-            description = itemView.findViewById(R.id.DescriptionNote);
-
-
+            btnDelete = itemView.findViewById(R.id.deleteBtn);
+            nameTV = itemView.findViewById(R.id.nameNote);
+            descriptionTV = itemView.findViewById(R.id.DescriptionNote);
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (itemClickListener != null){
+                        itemClickListener.onItemClick(view,getAdapterPosition());
+                    }
+                }
+            });
         }
         public void setTextq(Note note){
-            String namee = note.getName();
-           name.setText(namee);
+            String name = note.getName();
+           nameTV.setText(name);
            String desc = note.getDescription();
-           description.setText(desc);
+           descriptionTV.setText(desc);
         }
     }
 

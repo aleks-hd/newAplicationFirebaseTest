@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hfad.newaplicationfirebasetest.adapter.NoteAdapter;
@@ -40,10 +42,9 @@ public class NoteFragment extends Fragment {
     ArrayList<Note> arrayList;
     RecyclerView recyclerView;
     NoteAdapter adapter;
-    String NOTE_COLLECTION = "notes";
+    String NOTE_COLLECTION = "1NewCOllections";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference = db.collection(NOTE_COLLECTION);
-    Map<String, Note> notesfordb;
     ArrayList<Note> notewithDB;
     Note note;
 
@@ -60,7 +61,10 @@ public class NoteFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewContainer);
         initEnterInfo(view);
         initInputData(view);
+
+
         initRecyclerView(recyclerView);
+        readdb();
         return view;
     }
 
@@ -78,7 +82,13 @@ public class NoteFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new NoteAdapter(arrayList);
         recyclerView.setAdapter(adapter);
-
+        adapter.SetOnClickListener(new NoteAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                collectionReference.document(arrayList.get(position).getId()).delete();
+                readdb();
+            }
+        });
     }
 
 
@@ -88,22 +98,36 @@ public class NoteFragment extends Fragment {
         description = view.findViewById(R.id.editDescription);
         clearBtn = view.findViewById(R.id.deleteNote);
         addBtn = view.findViewById(R.id.addNote);
-        saveBtn = view.findViewById(R.id.saveNote);
+        //saveBtn = view.findViewById(R.id.saveNote);
     }
 
     //инициализация слушателя
     private void initInputData(View view) {
         arrayList = new ArrayList<>();
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-
-
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("add Note", arrayList.size() + "");
+                //arrayList.clear();
+                Log.d("add Note", arrayList.size() + "");
                 initclickadd();
-                Log.d("add Note", "Якобы сохранили");
+
             }
         });
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteDB();
+            }
+        });
+    }
 
+    private void deleteDB() {
+        for (Note note : arrayList){
+            collectionReference.document(note.getId()).delete();
+        }
+
+        readdb();
     }
 
     void initclickadd() {
@@ -111,20 +135,17 @@ public class NoteFragment extends Fragment {
         nameInput = (String) name.getText().toString();
         descriptionInput = (String) description.getText().toString();
         Note note = new Note();
-        notesfordb = new HashMap<>();
-        notesfordb.put("object_1", note);
         note.setName(nameInput);
         note.setDescription(descriptionInput);
         arrayList.add(note);
-        adapter.notifyDataSetChanged();
-        initDB();
         readdb();
+        initDB(note);
 
     }
 
-    void initDB() {
+    void initDB(Note note) {
         collectionReference
-                .add(notesfordb)
+                .add(NoteDataMapping.toDocument(note))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -142,30 +163,31 @@ public class NoteFragment extends Fragment {
 
     void readdb() {
 
-        collectionReference
+        collectionReference.orderBy(NoteDataMapping.Fields.NAME, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                         if (task.isSuccessful()) {
-                            notewithDB = new ArrayList<Note>();
-
+                           arrayList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> documentMap = document.getData();
                                 note = NoteDataMapping.toNote(document.getId(), documentMap);
-                                notewithDB.add(note);
+                                arrayList.add(note);
                                 String name = note.getName();
 
-                                Log.d("OUTPUT", name+ "");
+                                Log.d("OUTPUT", name + "");
 
                                 Log.d("ответ от БД", document.getId() + " => " + document.getData());
                             }
+                            adapter.notifyDataSetChanged();
                         } else {
                             Log.w("ошибка", "Error getting documents.", task.getException());
                         }
                     }
                 });
     }
+
 
 }

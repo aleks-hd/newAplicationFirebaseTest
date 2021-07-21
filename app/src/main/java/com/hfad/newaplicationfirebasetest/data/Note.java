@@ -35,6 +35,11 @@ public class Note implements Parcelable {
     public Note() {
     }
 
+    public Note(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     protected Note(Parcel in) {
     }
 

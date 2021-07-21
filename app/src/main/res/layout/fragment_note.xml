@@ -10,39 +10,49 @@
         android:id="@+id/editName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите текст"
+        android:hint="@string/higtEditName"
         />
     <EditText
         android:id="@+id/editDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите описание"
+        android:hint="@string/higtEditDescription"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="@dimen/sizeSpace"
+            android:layout_height="wrap_content"/>
         <Button
             android:id="@+id/deleteNote"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/widthZero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Удалить"
+            android:text="@string/btnDelete"
             android:textStyle="italic"/>
-        <Button
+     <!--   <Button
             android:id="@+id/saveNote"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/widthZero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Сохранить"
-            android:textStyle="italic"/>
+            android:text="@string/btnSave"
+            android:textStyle="italic"/>-->
+        <Space
+            android:layout_width="@dimen/sizeSpace"
+            android:layout_height="wrap_content"/>
         <Button
             android:id="@+id/addNote"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/widthZero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Добавить"
+            android:text="@string/btnAdd"
             android:textStyle="italic"/>
+        <Space
+            android:layout_width="@dimen/sizeSpace"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

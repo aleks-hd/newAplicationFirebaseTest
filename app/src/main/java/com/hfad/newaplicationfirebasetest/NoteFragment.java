@@ -1,9 +1,11 @@
 package com.hfad.newaplicationfirebasetest;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -85,10 +87,34 @@ public class NoteFragment extends Fragment {
         adapter.SetOnClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                collectionReference.document(arrayList.get(position).getId()).delete();
+                deleteforAllert(position);
+
                 readdb();
             }
         });
+    }
+
+    private void deleteforAllert(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.titleAllert)
+                .setMessage(R.string.messageAllert)
+                .setIcon(R.mipmap.ic_launcher_round)
+                .setCancelable(false)
+                .setPositiveButton(R.string.button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        collectionReference.document(arrayList.get(position).getId()).delete();
+                    }
+                })
+                .setNegativeButton(R.string.buttonoff, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
     }
 
 

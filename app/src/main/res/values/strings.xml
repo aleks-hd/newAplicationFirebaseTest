@@ -9,4 +9,10 @@
     <string name="btnDelete">Удалить</string>
     <string name="btnSave">Сохранить</string>
     <string name="btnAdd">Добавить</string>
+
+    <string name="titleAllert">Удаление</string>
+    <string name="messageAllert">Вы действительно хотите удалить заметку ?</string>
+    <string name="button">Да</string>
+    <string name="buttonoff">Нет</string>
+
 </resources>
